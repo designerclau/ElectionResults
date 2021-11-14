@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="ElectionResults.jnlp">
+  <information>
+    <title>ElectionResults</title>
+    <vendor>35383</vendor>
+    <description>null</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="ElectionResults.jar" size="24903" download="eager" />
+  </resources>
+  <jfx:javafx-desc  width="800" height="600" main-class="electionresults.ElectionResults"  name="ElectionResults" />
+  <update check="always"/>
+</jnlp>
