@@ -159,7 +159,7 @@ public class MainController implements Initializable {
         yAxis.setLabel("Votes");
         
 
-        updateChart();
+       // updateChart();
 
 
     }
@@ -197,6 +197,7 @@ public class MainController implements Initializable {
 
         tableResults.setItems(data);
         loadingData();
+       // updateChart();
     }
 
     public void loadingData() {
@@ -307,21 +308,24 @@ public class MainController implements Initializable {
        List<Election> copy = new ArrayList<Election>(dataList);
 
        for (int i=0; i<copy.size();i++){
-           if (copy.get(i).getCountNumber().getValue()==1){
+           if (copy.get(i).getCountNumber().getValue()==10){
+               if(copy.get(i).getResult().getValue().equals("Elected")){
                sumarizedCandidate.add(copy.get(i));
+               }
            }
        }
        System.out.println("Printing copy");
 
        for (int i=0; i<sumarizedCandidate.size();i++) {
-           System.out.println(sumarizedCandidate.get(i).getCandidateSurname().getValue());
+           System.out.println(sumarizedCandidate.get(i).getCandidateSurname().getValue()+ " "+sumarizedCandidate.get(i).getVotes().getValue());
         
            candidateList.add(sumarizedCandidate.get(i).getCandidateSurname().getValue());
            candidateVote = sumarizedCandidate.get(i).getVotes().getValue();
            series = new XYChart.Series<>();
            series.getData().add(new XYChart.Data<>(candidateList.get(i), candidateVote));
+           barChartResults.getData().add(series);
        }
-       barChartResults.getData().add(series);
+     
        
    }
     
@@ -365,7 +369,7 @@ public class MainController implements Initializable {
             int i = 0;
             String line;
             Regex rg = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
-            
+           
             while ((line = br.readLine()) != null) {
 
                 String[] fields = line.split(FieldDelimiter, -1);
@@ -378,25 +382,10 @@ public class MainController implements Initializable {
 
                 // Surname split
                 String result3 = "";
-                String result2 = fields[1];
+                String result2 = fields[1].replaceAll("\"", "");
                 System.out.println("First char of " + result2 + "is: " + result2.charAt(0));
-                if (result2.charAt(0) == '"' || result2.charAt(0) == ',') {
-                    System.out.println("dentro do primeiro if");
-                    result3 = result2.substring(1, result2.length());
-                    System.out.println("Result 3 " + result3);
-                    if (result3.charAt(result3.length() - 1) == '"'
-                            || result3.charAt(result3.length() - 1) == ',') {
-                        result3 = result3.substring(0, result3.length() - 2);
-                    }
-                    result2 = result3;
-                    System.out.println("Result 2 " + result2);
-                }
-                if (result2.charAt(result2.length() - 1) == '"'
-                        || result2.charAt(result2.length() - 1) == ',') {
-
-                    result3 = result2.substring(0, result2.length() - 2);
-                    result2 = result3;
-                    System.out.println("Result 2 " + result2);
+                if (result2.charAt(0) == '"' ) {
+                    result2 = result2.substring(1, result2.length());
                 }
 
                 System.out.println(result2);
@@ -405,47 +394,50 @@ public class MainController implements Initializable {
                 ////////////////////////////////////////////
                 result2 = "";
                 result3 = "";
-                result2 = fields[2];
+                result2 = fields[2].replaceAll("\"", "");
                 System.out.println("First char of " + result2 + "is: " + result2.charAt(0));
-                if (result2.charAt(0) == '"' || result2.charAt(0) == ',') {
-                    System.out.println("dentro do primeiro if");
-                    result3 = result2.substring(1, result2.length());
-                    System.out.println("Result 3 " + result3);
-                    if (result3.charAt(result3.length() - 1) == '"'
-                            || result3.charAt(result3.length() - 1) == ',') {
-                        result3 = result3.substring(0, result3.length() - 2);
-                    }
-                    result2 = result3;
-                    System.out.println("Result 2 " + result2);
+                if (result2.charAt(0) == '"') {
+                    System.out.println("Invalid");
+                    
+                    result2 = fields[3].replaceAll("\"", "");
+                    election.setCandidateFirstName(result2);
+                    result = fields[4].replaceAll("\"", "");
+                    result = result.replaceAll("\"^[0-9,;]+$\"", "");
+                    election.setResult(result);
+                    // System.out.println(i);
+                    election.setCountNumber(parseInt(getOnlyDigits(fields[5])));
+                    election.setNonTransferable(parseInt(getOnlyDigits(fields[6])));
+                    election.setOccurredOnCount(parseInt(getOnlyDigits(fields[7])));
+                    election.setRequiredToReachQuota(parseInt(getOnlyDigits(fields[8])));
+                    election.setRequiredToSaveDeposit(parseInt(getOnlyDigits(fields[9])));
+                    election.setTransfers(parseInt(getOnlyDigits(fields[10])));
+                    election.setVotes(parseInt(getOnlyDigits(fields[11])));
+                    election.setTotalVotes(parseInt(getOnlyDigits(fields[12])));
+                    election.setConstituencyNumber(parseInt(getOnlyDigits(fields[13])));
+                    election.setCandidateId(parseInt(getOnlyDigits(fields[14])));
+                }else{
+                    
+                
+                    result2 = fields[2];
+                    election.setCandidateFirstName(result2);
+                    result = fields[3].replaceAll("\"", "");
+                    result = result.replaceAll("\"^[0-9,;]+$\"", "");
+                    election.setResult(result);
+                    // System.out.println(i);
+                    election.setCountNumber(parseInt(getOnlyDigits(fields[4])));
+                    election.setNonTransferable(parseInt(getOnlyDigits(fields[5])));
+                    election.setOccurredOnCount(parseInt(getOnlyDigits(fields[6])));
+                    election.setRequiredToReachQuota(parseInt(getOnlyDigits(fields[7])));
+                    election.setRequiredToSaveDeposit(parseInt(getOnlyDigits(fields[8])));
+                    election.setTransfers(parseInt(getOnlyDigits(fields[9])));
+                    election.setVotes(parseInt(getOnlyDigits(fields[10])));
+                    election.setTotalVotes(parseInt(getOnlyDigits(fields[11])));
+                    election.setConstituencyNumber(parseInt(getOnlyDigits(fields[12])));
+                    election.setCandidateId(parseInt(getOnlyDigits(fields[13])));
+        
                 }
-                if (result2.charAt(result2.length() - 1) == '"'
-                        || result2.charAt(result2.length() - 1) == ',') {
-
-                    result3 = result2.substring(0, result2.length() - 2);
-                    result2 = result3;
-                    System.out.println("Result 2 " + result2);
-                }
-
-                System.out.println(result2);
-
-                election.setCandidateFirstName(result2);
-
-                /////////////////////////////////////////////////////////////
-                result = fields[3].replaceAll("\"", "");
-                result = result.replaceAll("\"^[0-9,;]+$\"", "");
-                election.setResult(result);
-                // System.out.println(i);
-                election.setCountNumber(parseInt(getOnlyDigits(fields[4])));
-                election.setNonTransferable(parseInt(getOnlyDigits(fields[5])));
-                election.setOccurredOnCount(parseInt(getOnlyDigits(fields[6])));
-                election.setRequiredToReachQuota(parseInt(getOnlyDigits(fields[7])));
-                election.setRequiredToSaveDeposit(parseInt(getOnlyDigits(fields[8])));
-                election.setTransfers(parseInt(getOnlyDigits(fields[9])));
-                election.setVotes(parseInt(getOnlyDigits(fields[10])));
-                election.setTotalVotes(parseInt(getOnlyDigits(fields[11])));
-                election.setConstituencyNumber(parseInt(getOnlyDigits(fields[12])));
-                election.setCandidateId(parseInt(getOnlyDigits(fields[13])));
-
+                
+              
                 dataList.add(election);
 
                 tableResults.setItems(dataList);
